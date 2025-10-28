@@ -15,3 +15,18 @@ dev = [
     "pre-commit>=4.3.0",
     "ruff>=0.14.2",
 ]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "D104",  # Missing docstring in public package
+    "F401",  # Unused import (allow re-exports without __all__)
+]
