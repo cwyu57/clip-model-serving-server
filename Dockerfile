@@ -8,8 +8,6 @@ RUN uv sync --frozen --no-cache
 # === Runtime Stage ===
 FROM python:3.13-slim-trixie AS runtime
 
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /workspace
 COPY --from=builder /workspace/.venv/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
 COPY ./app ./app
