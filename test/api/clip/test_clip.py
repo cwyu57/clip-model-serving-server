@@ -6,5 +6,5 @@ class TestClipSearch:
 
     def test_search_success(self, client):
         """Test that /clip/search returns 200 status code."""
-        response = client.post("/clip/search?query=cat")
+        response = client.post("/clip/search", json={"query": "cat"})
         assert response.status_code == 200
