@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+
+# Environments
+.env
+.venv
+
+# macOS
+.DS_Store
+
+# Cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pre-commit hooks
+.pre-commit-config.yaml
+
+# Ruff
+.ruff_cache/
+
+# Mypy
+.mypy_cache/
+
+# Dockerfile
+Dockerfile
+.dockerignore
