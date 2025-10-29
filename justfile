@@ -9,3 +9,8 @@ pg-down:
 
 pg-logs:
     docker compose logs -f postgres
+
+
+# Run entire app stack in Docker (app + infrastructure)
+dev:
+    docker compose up app --build
