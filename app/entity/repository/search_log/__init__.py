@@ -1,6 +1,9 @@
-from fastapi._compat.v1 import BaseModel
+import uuid
+
+from pydantic import BaseModel
 
 
 class CreateSearchLogInputSchema(BaseModel):
     query: str
     image_url: str
+    user_id: uuid.UUID

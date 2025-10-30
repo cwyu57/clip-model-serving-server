@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 class SearchImageIn(BaseModel):
     query: str
+    user_id: uuid.UUID
 
 
 class SearchImageOut(BaseModel):

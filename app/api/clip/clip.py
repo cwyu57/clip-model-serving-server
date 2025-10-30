@@ -33,8 +33,9 @@ async def search_image(
     current_user: Annotated[Users, Depends(get_current_user)],
     clip_use_case: Annotated[ClipUseCase, Depends(get_clip_use_case)],
 ) -> SearchRequestResponse:
-    # TODO: store user_id in the search_log
-    result = await clip_use_case.search_image(SearchImageIn(query=request_params.query))
+    result = await clip_use_case.search_image(
+        SearchImageIn(query=request_params.query, user_id=current_user.id)
+    )
     return SearchRequestResponse(id=result.id, image_url=result.image_url)
 
 

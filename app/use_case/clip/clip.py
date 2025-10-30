@@ -55,7 +55,9 @@ class ClipUseCase:
 
         search_log = await self.search_log_repository.create_search_log(
             CreateSearchLogInputSchema(
-                query=search_image_in.query, image_url=most_similar_image_url
+                query=search_image_in.query,
+                image_url=most_similar_image_url,
+                user_id=search_image_in.user_id,
             )
         )
         return SearchImageOut(id=search_log.id, image_url=most_similar_image_url)

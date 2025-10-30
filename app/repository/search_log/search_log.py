@@ -14,7 +14,11 @@ class SearchLogRepository:
     ) -> SearchLogs:
         result = await self.session.execute(
             insert(SearchLogs)
-            .values(query=input_schema.query, image_url=input_schema.image_url)
+            .values(
+                query=input_schema.query,
+                image_url=input_schema.image_url,
+                user_id=input_schema.user_id,
+            )
             .returning(SearchLogs)
         )
         return result.scalar_one()
