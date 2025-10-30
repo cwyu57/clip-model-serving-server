@@ -22,6 +22,9 @@ migrate-create:
     MIGRATION_NAME=$(gum input --placeholder "Enter migration name")
     uv run alembic revision --rev-id "${REVISION}" -m "${MIGRATION_NAME}"
 
+migrate:
+    uv run alembic upgrade head
+
 migrate-alembic-current:
     uv run alembic current
 
