@@ -1,6 +1,5 @@
 set dotenv-load
 
-
 pg-up:
     docker compose up -d postgres
 
@@ -10,11 +9,12 @@ pg-down:
 pg-logs:
     docker compose logs -f postgres
 
+local:
+    just pg-up
+    uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
-# Run entire app stack in Docker (app + infrastructure)
 dev:
     docker compose up app --build
-
 
 migrate-create:
     #!/usr/bin/env bash

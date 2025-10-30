@@ -24,6 +24,9 @@ __pycache__/
 # Mypy
 .mypy_cache/
 
+# Pytest
+.pytest_cache/
+
 # Dockerfile
 Dockerfile
 .dockerignore
