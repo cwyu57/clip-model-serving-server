@@ -39,6 +39,20 @@ class SearchLogs(Base):
     )
 
 
+class Users(Base):
+    __tablename__ = "users"
+    __table_args__ = (
+        PrimaryKeyConstraint("id", name="users_pkey"),
+        UniqueConstraint("username", name="users_username_key"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    username: Mapped[str] = mapped_column(String)
+    hashed_password: Mapped[str] = mapped_column(String)
+
+
 class SearchFeedbacks(Base):
     __tablename__ = "search_feedbacks"
     __table_args__ = (
