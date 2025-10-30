@@ -18,27 +18,6 @@ class Base(DeclarativeBase):
     pass
 
 
-class SearchLogs(Base):
-    __tablename__ = "search_logs"
-    __table_args__ = (PrimaryKeyConstraint("id", name="search_logs_pkey"),)
-
-    id: Mapped[uuid.UUID] = mapped_column(
-        Uuid, primary_key=True, server_default=text("gen_random_uuid()")
-    )
-    query: Mapped[str] = mapped_column(String)
-    image_url: Mapped[str] = mapped_column(String)
-    created_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(True), server_default=text("now()")
-    )
-    updated_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(True), server_default=text("now()")
-    )
-
-    search_feedbacks: Mapped["SearchFeedbacks"] = relationship(
-        "SearchFeedbacks", uselist=False, back_populates="search_log"
-    )
-
-
 class Users(Base):
     __tablename__ = "users"
     __table_args__ = (
@@ -51,6 +30,36 @@ class Users(Base):
     )
     username: Mapped[str] = mapped_column(String)
     hashed_password: Mapped[str] = mapped_column(String)
+
+    search_logs: Mapped[list["SearchLogs"]] = relationship(
+        "SearchLogs", back_populates="user"
+    )
+
+
+class SearchLogs(Base):
+    __tablename__ = "search_logs"
+    __table_args__ = (
+        ForeignKeyConstraint(["user_id"], ["users.id"], name="fk_search_logs_user_id"),
+        PrimaryKeyConstraint("id", name="search_logs_pkey"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    query: Mapped[str] = mapped_column(String)
+    image_url: Mapped[str] = mapped_column(String)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(True), server_default=text("now()")
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(True), server_default=text("now()")
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(Uuid)
+
+    user: Mapped["Users"] = relationship("Users", back_populates="search_logs")
+    search_feedbacks: Mapped["SearchFeedbacks"] = relationship(
+        "SearchFeedbacks", uselist=False, back_populates="search_log"
+    )
 
 
 class SearchFeedbacks(Base):
