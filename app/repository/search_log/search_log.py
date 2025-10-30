@@ -1,3 +1,6 @@
+import uuid
+
+from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,3 +25,10 @@ class SearchLogRepository:
             .returning(SearchLogs)
         )
         return result.scalar_one()
+
+    async def get_search_log_by_id(self, search_log_id: uuid.UUID) -> SearchLogs | None:
+        """Get search log by ID."""
+        result = await self.session.execute(
+            select(SearchLogs).where(SearchLogs.id == search_log_id)
+        )
+        return result.scalar_one_or_none()

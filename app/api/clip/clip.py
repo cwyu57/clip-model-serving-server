@@ -50,13 +50,14 @@ async def search_image(
 async def upsert_search_feedback(
     search_id: uuid.UUID,
     request_params: FeedbackRequestParams,
-    get_current_user: Annotated[Users, Depends(get_current_user)],
+    current_user: Annotated[Users, Depends(get_current_user)],
     feedback_use_case: Annotated[FeedbackUseCase, Depends(get_feedback_use_case)],
 ) -> FeedbackResponse:
-    # TODO: check if current_user has access to the search_log_id
     result = await feedback_use_case.upsert_feedback(
         UpsertFeedbackIn(
-            search_log_id=search_id, is_relevant=request_params.is_relevant
+            search_log_id=search_id,
+            is_relevant=request_params.is_relevant,
+            user_id=current_user.id,
         )
     )
     return FeedbackResponse(

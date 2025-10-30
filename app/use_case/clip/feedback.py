@@ -1,16 +1,38 @@
+from fastapi import HTTPException, status
+
 from app.entity.repository.search_feedback import UpsertSearchFeedbackInputSchema
 from app.entity.use_case.clip import UpsertFeedbackIn, UpsertFeedbackOut
 from app.repository.search_feedback.search_feedback import SearchFeedbackRepository
+from app.repository.search_log.search_log import SearchLogRepository
 
 
 class FeedbackUseCase:
-    def __init__(self, search_feedback_repository: SearchFeedbackRepository):
+    def __init__(
+        self,
+        search_feedback_repository: SearchFeedbackRepository,
+        search_log_repository: SearchLogRepository,
+    ):
         self.search_feedback_repository = search_feedback_repository
+        self.search_log_repository = search_log_repository
 
     async def upsert_feedback(
         self, upsert_feedback_in: UpsertFeedbackIn
     ) -> UpsertFeedbackOut:
         """Upsert (insert or update) search feedback."""
+
+        search_log = await self.search_log_repository.get_search_log_by_id(
+            upsert_feedback_in.search_log_id
+        )
+        if search_log is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Search log not found",
+            )
+        if upsert_feedback_in.user_id != search_log.user_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not allowed to upsert feedback for this search log",
+            )
         feedback = await self.search_feedback_repository.upsert_search_feedback(
             UpsertSearchFeedbackInputSchema(
                 search_log_id=upsert_feedback_in.search_log_id,

@@ -22,5 +22,8 @@ def get_feedback_use_case(
     search_feedback_repository: Annotated[
         SearchFeedbackRepository, Depends(get_search_feedback_repository)
     ],
+    search_log_repository: Annotated[
+        SearchLogRepository, Depends(get_search_log_repository)
+    ],
 ) -> FeedbackUseCase:
-    return FeedbackUseCase(search_feedback_repository)
+    return FeedbackUseCase(search_feedback_repository, search_log_repository)

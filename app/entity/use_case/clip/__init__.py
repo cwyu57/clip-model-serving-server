@@ -17,6 +17,7 @@ class SearchImageOut(BaseModel):
 class UpsertFeedbackIn(BaseModel):
     search_log_id: uuid.UUID
     is_relevant: bool
+    user_id: uuid.UUID
 
 
 class UpsertFeedbackOut(BaseModel):
