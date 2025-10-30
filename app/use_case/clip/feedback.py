@@ -15,14 +15,10 @@ class FeedbackUseCase:
         self.search_feedback_repository = search_feedback_repository
         self.search_log_repository = search_log_repository
 
-    async def upsert_feedback(
-        self, upsert_feedback_in: UpsertFeedbackIn
-    ) -> UpsertFeedbackOut:
+    async def upsert_feedback(self, upsert_feedback_in: UpsertFeedbackIn) -> UpsertFeedbackOut:
         """Upsert (insert or update) search feedback."""
 
-        search_log = await self.search_log_repository.get_search_log_by_id(
-            upsert_feedback_in.search_log_id
-        )
+        search_log = await self.search_log_repository.get_search_log_by_id(upsert_feedback_in.search_log_id)
         if search_log is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -33,6 +29,9 @@ class FeedbackUseCase:
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="You are not allowed to upsert feedback for this search log",
             )
+
+        # TODO: check with Brad, this should be an upsert (unique by search_log_id) or insert?
+        # TODO: and according to Brad's response, change the Restful method to POST if it's an insert.
         feedback = await self.search_feedback_repository.upsert_search_feedback(
             UpsertSearchFeedbackInputSchema(
                 search_log_id=upsert_feedback_in.search_log_id,

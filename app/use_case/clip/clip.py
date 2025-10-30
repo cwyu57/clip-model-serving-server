@@ -15,6 +15,11 @@ class ClipUseCase:
         self.search_log_repository = search_log_repository
 
     async def search_image(self, search_image_in: SearchImageIn) -> SearchImageOut:
+        # TODO: use all 328 images in the dataset provided
+        # TODO: performance optimization, not load model here
+        # TODO: calculate image embeddings in advanced
+        # TODO: save the text embeddings in the database along with the model info
+
         # Load pre-trained CLIP model and processor
         model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
         processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
@@ -24,10 +29,7 @@ class ClipUseCase:
             "http://images.cocodataset.org/val2017/000000010363.jpg",
             "http://images.cocodataset.org/val2017/000000022192.jpg",
         ]
-        images = [
-            Image.open(BytesIO(requests.get(image_url).content)).convert("RGB")
-            for image_url in image_urls
-        ]
+        images = [Image.open(BytesIO(requests.get(image_url).content)).convert("RGB") for image_url in image_urls]
 
         # Prepare search term
         text = search_image_in.query
@@ -40,12 +42,8 @@ class ClipUseCase:
             outputs = model(**inputs)
 
         # Extract and normalize image and text embeddings
-        image_embeddings = outputs.image_embeds / outputs.image_embeds.norm(
-            dim=-1, keepdim=True
-        )
-        text_embeddings = outputs.text_embeds / outputs.text_embeds.norm(
-            dim=-1, keepdim=True
-        )
+        image_embeddings = outputs.image_embeds / outputs.image_embeds.norm(dim=-1, keepdim=True)
+        text_embeddings = outputs.text_embeds / outputs.text_embeds.norm(dim=-1, keepdim=True)
 
         # Compute cosine similarity
         cosine_scores = torch.cosine_similarity(image_embeddings, text_embeddings)
