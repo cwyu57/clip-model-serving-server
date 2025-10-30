@@ -30,3 +30,16 @@ migrate-alembic-upgrade-by-one:
 
 migrate-alembic-downgrade-by-one:
     uv run alembic downgrade -1
+
+sqlacodegen-models:
+    #!/usr/bin/env bash
+    OUTPUT_FILE="${1:-app/entity/model/generated.py}"
+    : "${POSTGRES_USER:?POSTGRES_USER is not set}"
+    : "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set}"
+    : "${POSTGRES_DB:?POSTGRES_DB is not set}"
+    : "${POSTGRES_HOST:?POSTGRES_HOST is not set}"
+    : "${POSTGRES_PORT:?POSTGRES_PORT is not set}"
+    DATABASE_URL="postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+    echo "Generating models from database: ${DATABASE_URL}"
+    uv run sqlacodegen "${DATABASE_URL}" --outfile "${OUTPUT_FILE}"
+    echo "Models generated to: ${OUTPUT_FILE}"
