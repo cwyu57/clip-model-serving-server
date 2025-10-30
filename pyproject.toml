@@ -32,6 +32,9 @@ dev = [
     "types-requests>=2.32.4.20250913",
 ]
 
+[tool.ruff]
+line-length = 120
+
 [tool.ruff.lint]
 select = [
     "E",   # pycodestyle errors
@@ -44,5 +47,7 @@ select = [
 ]
 ignore = [
     "D104",  # Missing docstring in public package
-    "F401",  # Unused import (allow re-exports without __all__)
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Allow re-exports without __all__
