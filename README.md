@@ -1,8 +1,17 @@
-# Clip Model Serving Server
+# CLIP Model Serving Server
 
-## 🚧 Key Features
+A FastAPI-based service for serving OpenAI's CLIP model, providing image and text embedding generation capabilities with built-in authentication, search logging, and feedback collection.
 
-## 🚧 Prerequisites
+## Features
+
+- Fast and scalable CLIP model inference
+- JWT-based authentication
+- Search logging and analytics
+- User feedback collection
+- Docker-ready deployment
+- Comprehensive API documentation with OpenAPI/Swagger
+
+## Prerequisites
 
 Before you begin, ensure you have the following installed on your macOS system:
 
@@ -90,3 +99,21 @@ Run everything in Docker (app + infrastructure):
 ```bash
 just dev
 ```
+
+### 6. Access the API Documentation
+
+Open the interactive OpenAPI documentation in your browser:
+
+```bash
+open http://localhost:8000/docs
+```
+
+## Usage
+
+### Authentication
+
+The API uses JWT-based authentication. Use the following credentials for testing:
+
+**Default Test User:**
+- Username: `user-1`, `user-2`, `user-3`, `user-4`, `user-5`
+- Password: `password123`
