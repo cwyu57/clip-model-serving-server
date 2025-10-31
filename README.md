@@ -32,7 +32,7 @@ Before you begin, ensure you have the following installed on your macOS system:
    ```
    Then reload your shell: `source ~/.zshrc`
 
-3. **Docker Desktop** - For running PostgreSQL and LocalStack
+3. **Docker Desktop** - For running PostgreSQL
 
    Download and install from [docker.com](https://www.docker.com/products/docker-desktop/)
 
