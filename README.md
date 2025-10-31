@@ -111,3 +111,7 @@ open http://localhost:8000/docs
 **Default Test User:**
 - Username: `user-1`, `user-2`, `user-3`, `user-4`, `user-5`
 - Password: `password123`
+
+
+### 7. ER Diagram
+![ER Diagram](./asset/er-diagram.png)

@@ -30,3 +30,6 @@ __pycache__/
 # Dockerfile
 Dockerfile
 .dockerignore
+
+# Asset
+asset/
