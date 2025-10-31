@@ -59,15 +59,16 @@ This will create a virtual environment and install all dependencies defined in `
 
 ### 3. Set Up Environment Variables
 
-Create a `.env` file in the project root:
-or just `cp .env.example .env`
+```bash
+cp .env.example .env
+```
 
 ### 4. Run Database Migrations
 
 Apply database schema migrations:
 
 ```bash
-just migrate
+just pg-up && just migrate
 ```
 
 ### 5. Start the Development Server
