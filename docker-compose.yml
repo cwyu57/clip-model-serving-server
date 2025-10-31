@@ -30,6 +30,9 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST: postgres # in docker-compose environment, the service name is used as the host
       POSTGRES_PORT: ${POSTGRES_PORT}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_ALGORITHM: ${JWT_ALGORITHM}
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES}
     depends_on:
       postgres:
         condition: service_healthy
