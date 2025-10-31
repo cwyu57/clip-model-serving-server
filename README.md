@@ -108,12 +108,6 @@ Open the interactive OpenAPI documentation in your browser:
 open http://localhost:8000/docs
 ```
 
-## Usage
-
-### Authentication
-
-The API uses JWT-based authentication. Use the following credentials for testing:
-
 **Default Test User:**
 - Username: `user-1`, `user-2`, `user-3`, `user-4`, `user-5`
 - Password: `password123`
