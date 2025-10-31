@@ -52,7 +52,7 @@ cd clip-model-serving-server
 ### 2. Install Python Dependencies
 
 ```bash
-uv sync --extra dev
+uv sync --dev
 ```
 
 This will create a virtual environment and install all dependencies defined in `pyproject.toml`.
