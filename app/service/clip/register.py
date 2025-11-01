@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from app.service.clip.clip_service import CLIPService
+from app.service.clip.clip import CLIPService
 
 
 @lru_cache(maxsize=1)

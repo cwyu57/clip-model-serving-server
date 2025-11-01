@@ -1,7 +1,7 @@
 from app.entity.repository.search_log import CreateSearchLogInputSchema
 from app.entity.use_case.clip import SearchImageIn, SearchImageOut
 from app.repository.search_log.search_log import SearchLogRepository
-from app.service.clip.clip_service import CLIPService
+from app.service.clip import CLIPService
 
 
 class ImageSearchUseCase:
