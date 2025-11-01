@@ -13,10 +13,20 @@ class CLIPService:
     - Model loading and caching
     - Image processing
     - Similarity computation
+
+    Note:
+        Do not instantiate this class directly. Use get_clip_service() instead
+        to ensure the model is loaded only once and reused across all requests.
     """
 
     def __init__(self):
-        """Initialize CLIP service and load model."""
+        """Initialize CLIP service and load model.
+
+        Warning:
+            This method loads the CLIP model which is resource-intensive.
+            Always use get_clip_service() to get a singleton instance
+            instead of creating new instances directly.
+        """
         print("Loading CLIP model...")
         self.model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
         self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
