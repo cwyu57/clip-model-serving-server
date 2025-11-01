@@ -11,7 +11,7 @@ from app.use_case.clip.search import ImageSearchUseCase
 
 def get_image_search_use_case(
     search_log_repository: Annotated[SearchLogRepository, Depends(get_search_log_repository)],
-    clip_service: Annotated[CLIPService, Depends(get_clip_service())],
+    clip_service: Annotated[CLIPService, Depends(get_clip_service)],
 ) -> ImageSearchUseCase:
     return ImageSearchUseCase(search_log_repository, clip_service)
 
