@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
 
-from app.core.dependencies import get_current_user
+from app.core.auth import get_current_user
 from app.entity.controller.clip import (
     FeedbackRequestParams,
     FeedbackResponse,
