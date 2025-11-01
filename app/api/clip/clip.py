@@ -12,12 +12,7 @@ from app.entity.controller.clip import (
 )
 from app.entity.model.generated import Users
 from app.entity.use_case.clip import SearchImageIn, UpsertFeedbackIn
-from app.use_case.clip import (
-    ClipUseCase,
-    FeedbackUseCase,
-    get_clip_use_case,
-    get_feedback_use_case,
-)
+from app.use_case.clip import FeedbackUseCase, ImageSearchUseCase, get_feedback_use_case, get_image_search_use_case
 
 router = APIRouter()
 
@@ -31,9 +26,9 @@ router = APIRouter()
 async def search_image(
     request_params: SearchRequestParams,
     current_user: Annotated[Users, Depends(get_current_user)],
-    clip_use_case: Annotated[ClipUseCase, Depends(get_clip_use_case)],
+    image_search_use_case: Annotated[ImageSearchUseCase, Depends(get_image_search_use_case)],
 ) -> SearchRequestResponse:
-    result = await clip_use_case.search_image(
+    result = await image_search_use_case.search_image(
         SearchImageIn(query=request_params.query, user_id=current_user.id)
     )
     return SearchRequestResponse(id=result.id, image_url=result.image_url)
@@ -43,9 +38,7 @@ async def search_image(
     "/search/{search_id}/feedback",
     status_code=status.HTTP_200_OK,
     summary="Submit feedback for a search result",
-    description=(
-        "Create or update feedback for a search result indicating if it was relevant"
-    ),
+    description=("Create or update feedback for a search result indicating if it was relevant"),
 )
 async def upsert_search_feedback(
     search_id: uuid.UUID,

@@ -10,7 +10,7 @@ from app.entity.use_case.clip import SearchImageIn, SearchImageOut
 from app.repository.search_log.search_log import SearchLogRepository
 
 
-class ClipUseCase:
+class ImageSearchUseCase:
     def __init__(self, search_log_repository: SearchLogRepository):
         self.search_log_repository = search_log_repository
 
