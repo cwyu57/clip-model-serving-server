@@ -12,21 +12,15 @@ class ImageSearchUseCase:
     ):
         self.search_log_repository = search_log_repository
         self.clip_service = clip_service
-        # Hardcoded image URLs (as per requirement)
-        self.image_urls = [
-            "http://images.cocodataset.org/val2017/000000010363.jpg",
-            "http://images.cocodataset.org/val2017/000000022192.jpg",
-        ]
 
     async def search_image(self, search_image_in: SearchImageIn) -> SearchImageOut:
         # TODO: use all 328 images in the dataset provided
-        # TODO: calculate image embeddings in advanced
         # TODO: save the text embeddings in the database along with the model info
+        # NOTE: Image embeddings are now precomputed and loaded from safetensors
 
         # Delegate to service layer for model operations
         most_similar_image_url = self.clip_service.find_most_similar_image(
             text=search_image_in.query,
-            image_urls=self.image_urls,
         )
 
         # Focus on business logic: logging the search
