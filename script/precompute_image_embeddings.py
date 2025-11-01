@@ -5,10 +5,8 @@ and saves them to a safetensors file with image URLs as metadata.
 """
 
 import json
-from io import BytesIO
 from pathlib import Path
 
-import requests
 import torch
 from PIL import Image
 from safetensors.torch import save_file
@@ -21,19 +19,31 @@ def main():
     processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
     print("CLIP model loaded successfully!")
 
-    # Image URLs to precompute embeddings for
-    image_urls = [
-        "http://images.cocodataset.org/val2017/000000010363.jpg",
-        "http://images.cocodataset.org/val2017/000000022192.jpg",
-    ]
+    # Load images from local directory
+    data_dir = Path("data/val2014")
+    image_paths = sorted(data_dir.glob("*.jpg"))
 
-    print(f"Downloading and processing {len(image_urls)} images...")
+    if not image_paths:
+        print(f"Error: No images found in {data_dir}")
+        return
+
+    print(f"Found {len(image_paths)} images in {data_dir}")
+    print(f"Processing {len(image_paths)} images...")
     images = []
-    for i, url in enumerate(image_urls, 1):
-        print(f"  [{i}/{len(image_urls)}] Downloading {url}")
-        response = requests.get(url)
-        image = Image.open(BytesIO(response.content)).convert("RGB")
-        images.append(image)
+    image_urls = []  # Store file paths instead of URLs
+    for i, image_path in enumerate(image_paths, 1):
+        print(f"  [{i}/{len(image_paths)}] Loading {image_path.name}")
+        try:
+            image = Image.open(image_path).convert("RGB")
+            images.append(image)
+            image_urls.append(str(image_path))
+        except Exception as e:
+            print(f"    Warning: Failed to load {image_path.name}: {e}")
+            continue
+
+    if not images:
+        print("Error: No valid images loaded")
+        return
 
     print("Computing image embeddings...")
     inputs = processor(images=images, return_tensors="pt")
