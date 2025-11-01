@@ -1,11 +1,12 @@
 import asyncio
-import os
 from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+
+from app.core.config import get_current_config
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -29,38 +30,15 @@ target_metadata = None
 
 
 def configure_sqlalchemy_url() -> None:
-    """Configure SQLAlchemy URL from environment variables.
+    """Configure SQLAlchemy URL from configuration.
 
     This function builds the database connection URL using asyncpg driver
     for async operations. It validates that all required environment variables
     are present before constructing the URL.
     """
-    # Build database URL from individual environment variables
-    POSTGRES_USER = os.getenv("POSTGRES_USER")
-    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-    POSTGRES_DB = os.getenv("POSTGRES_DB")
-    POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-    POSTGRES_PORT = os.getenv("POSTGRES_PORT")
-
-    # Validate required environment variables
-    required_vars = {
-        "POSTGRES_USER": POSTGRES_USER,
-        "POSTGRES_PASSWORD": POSTGRES_PASSWORD,
-        "POSTGRES_DB": POSTGRES_DB,
-        "POSTGRES_HOST": POSTGRES_HOST,
-        "POSTGRES_PORT": POSTGRES_PORT,
-    }
-    missing_vars = [var for var, value in required_vars.items() if value is None]
-    if missing_vars:
-        raise ValueError(
-            f"Missing required environment variables: {', '.join(missing_vars)}"
-        )
-
-    # Use asyncpg driver for async mode
-    database_url = (
-        f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@"
-        f"{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
-    )
+    # Get configuration and database URL
+    app_config = get_current_config()
+    database_url = app_config.get_database_url()
     config.set_main_option("sqlalchemy.url", database_url)
 
 

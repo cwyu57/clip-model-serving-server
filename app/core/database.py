@@ -1,5 +1,4 @@
 import logging
-import os
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
@@ -9,39 +8,20 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
+from app.core.config import get_current_config
+
 # Configure logging
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
-# Build DATABASE_URL from individual environment variables
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
-POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+# Get current configuration
+config = get_current_config()
 
-# Validate required environment variables
-required_vars = {
-    "POSTGRES_USER": POSTGRES_USER,
-    "POSTGRES_PASSWORD": POSTGRES_PASSWORD,
-    "POSTGRES_DB": POSTGRES_DB,
-    "POSTGRES_HOST": POSTGRES_HOST,
-    "POSTGRES_PORT": POSTGRES_PORT,
-}
-missing_vars = [var for var, value in required_vars.items() if value is None]
-if missing_vars:
-    raise ValueError(
-        f"Missing required environment variables: {', '.join(missing_vars)}"
-    )
-
-# Use asyncpg driver for async support
-DATABASE_URL = (
-    f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@"
-    f"{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
-)
+# Build DATABASE_URL from configuration
+DATABASE_URL = config.get_database_url()
 
 # Enable SQL logging
-ENABLE_SQL_ECHO = os.getenv("ENABLE_SQL_ECHO", "false").lower() == "true"
+ENABLE_SQL_ECHO = config.ENABLE_SQL_ECHO
 
 engine: AsyncEngine = create_async_engine(DATABASE_URL, echo=ENABLE_SQL_ECHO)
 AsyncSessionLocal = async_sessionmaker(
