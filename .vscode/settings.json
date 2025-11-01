@@ -7,5 +7,6 @@
         },
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
-    "ruff.nativeServer": "on"
+    "ruff.nativeServer": "on",
+    "mypy.runUsingActiveInterpreter": true
 }
