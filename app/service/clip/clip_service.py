@@ -5,6 +5,10 @@ import torch
 from PIL import Image
 from transformers import CLIPModel, CLIPProcessor
 
+from app.core.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 class CLIPService:
     """Service for CLIP model operations.
@@ -27,10 +31,10 @@ class CLIPService:
             Always use get_clip_service() to get a singleton instance
             instead of creating new instances directly.
         """
-        print("Loading CLIP model...")
+        logger.info("Loading CLIP model...")
         self.model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
         self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
-        print("CLIP model loaded successfully!")
+        logger.info("CLIP model loaded successfully!")
 
     def find_most_similar_image(self, text: str, image_urls: list[str]) -> str:
         """Find the most similar image to the given text query.

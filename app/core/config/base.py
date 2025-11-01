@@ -22,6 +22,9 @@ class BaseConfig:
     # Application Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
 
+    # Logging Configuration
+    LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+
     @classmethod
     def get_database_url(cls) -> str:
         """Build and return the database URL.
