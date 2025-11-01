@@ -34,19 +34,19 @@ async def search_image(
     return SearchRequestResponse(id=result.id, image_url=result.image_url)
 
 
-@router.put(
+@router.post(
     "/search/{search_id}/feedback",
-    status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_201_CREATED,
     summary="Submit feedback for a search result",
-    description=("Create or update feedback for a search result indicating if it was relevant"),
+    description="Create feedback for a search result indicating if it was relevant",
 )
-async def upsert_search_feedback(
+async def create_search_feedback(
     search_id: uuid.UUID,
     request_params: FeedbackRequestParams,
     current_user: Annotated[Users, Depends(get_current_user)],
     feedback_use_case: Annotated[FeedbackUseCase, Depends(get_feedback_use_case)],
 ) -> FeedbackResponse:
-    result = await feedback_use_case.upsert_feedback(
+    result = await feedback_use_case.create_feedback(
         UpsertFeedbackIn(
             search_log_id=search_id,
             is_relevant=request_params.is_relevant,
