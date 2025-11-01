@@ -9,11 +9,25 @@ pg-down:
 pg-logs:
     docker compose logs -f postgres
 
+precompute-image-embeddings:
+    uv run python script/precompute_image_embeddings.py
+
+check-embeddings:
+    #!/usr/bin/env bash
+    if [ ! -f "./data/image_embeddings.safetensors" ]; then
+        echo "⚠️ Embeddings not found. Running precomputation..."
+        just precompute-image-embeddings
+    else
+        echo "✅ Embeddings file found, skipping precomputation."
+    fi
+
 local:
+    just check-embeddings
     just pg-up
     uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 dev:
+    just check-embeddings
     docker compose up app --build
 
 migrate-create:
