@@ -80,7 +80,16 @@ Apply database schema migrations:
 just pg-up && just migrate
 ```
 
-### 5. Start the Development Server
+### 5. Precompute image embeddings
+
+328 images in the dataset are committed to this repository (not best practice), but this keeps the demo setup simple
+
+```bash
+uv run script/precompute_image_embeddings.py
+```
+
+
+### 6. Start the Development Server
 
 You can run the application in different ways:
 
@@ -100,7 +109,7 @@ Run everything in Docker (app + infrastructure):
 just dev
 ```
 
-### 6. Access the API Documentation
+### 7. Access the API Documentation
 
 Open the interactive OpenAPI documentation in your browser:
 
@@ -113,5 +122,5 @@ open http://localhost:8000/docs
 - Password: `password123`
 
 
-### 7. ER Diagram
+### 8. ER Diagram
 ![ER Diagram](./asset/er-diagram.png)
