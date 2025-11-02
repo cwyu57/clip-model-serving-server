@@ -1,6 +1,10 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+import uuid
 
-from app.entity.model.generated import SearchFeedbacks
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
+from app.entity.model.generated import SearchFeedbacks, SearchLogs
 from app.entity.repository.search_feedback import UpsertSearchFeedbackInputSchema
 
 
@@ -18,3 +22,13 @@ class SearchFeedbackRepository:
         await self.session.flush()
         await self.session.refresh(feedback)
         return feedback
+
+    async def get_user_feedback_with_search_logs(self, user_id: uuid.UUID) -> list[SearchFeedbacks]:
+        """Get all feedback for a user with related search log data."""
+        result = await self.session.execute(
+            select(SearchFeedbacks)
+            .join(SearchLogs, SearchFeedbacks.search_log_id == SearchLogs.id)
+            .where(SearchLogs.user_id == user_id)
+            .options(selectinload(SearchFeedbacks.search_log))
+        )
+        return list(result.scalars().all())

@@ -52,8 +52,8 @@ class CLIPService:
 
         logger.info(f"Loaded {len(self.image_urls)} precomputed image embeddings")
 
-    def find_most_similar_image(self, text: str) -> str:
-        """Find the most similar image to the given text query.
+    def compute_similarity_scores(self, text: str) -> tuple[torch.Tensor, list[str]]:
+        """Compute similarity scores for all images given a text query.
 
         Uses precomputed image embeddings for faster inference.
 
@@ -61,7 +61,8 @@ class CLIPService:
             text: Search query text
 
         Returns:
-            URL of the most similar image
+            Tuple of (cosine_scores, image_urls) where cosine_scores is a tensor
+            of similarity scores for each image
         """
         # Process text only
         text_inputs = self.processor(text=text, return_tensors="pt", padding=True)
@@ -76,6 +77,4 @@ class CLIPService:
         # Compute cosine similarity with precomputed image embeddings
         cosine_scores = torch.cosine_similarity(self.precomputed_embeddings, text_embeddings)
 
-        # Find most similar
-        most_similar_index = int(torch.argmax(cosine_scores).item())
-        return self.image_urls[most_similar_index]
+        return cosine_scores, self.image_urls
