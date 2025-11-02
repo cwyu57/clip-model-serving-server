@@ -20,7 +20,7 @@ def main():
     print("CLIP model loaded successfully!")
 
     # Load images from local directory
-    data_dir = Path("data/val2014")
+    data_dir = Path("asset/val2014")
     image_paths = sorted(data_dir.glob("*.jpg"))
 
     if not image_paths:
